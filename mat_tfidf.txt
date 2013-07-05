@@ -8,7 +8,7 @@ def tfidf(color,img_pix,img_total):
 	if img_pix==0:
 		return 0
 	else:
-		return color * np.log(np.divide(img_total,img_pix))
+		return color * np.log(img_total/img_pix)
 
 with open("C:/Users/kao/Google Drive/Desktop/website/digit/train.csv","r",encoding="utf-8") as f:
 	header = f.readline()
@@ -26,7 +26,8 @@ img_pix_vec=bool_matrix.T.sum(1)
 
 result = np.array([])
 for img_vec in data_matrix:
-	result_row=np.array([tfidf(img_vec[i],img_pix_vec[i],img_total) for i in range(len(img_vec))])
+	double_vec = zip(img_vec,img_pix_vec)
+	result_row = np.array([tfidf(x[0],x[1],img_total) for x in double_vec])
 	try:
 		result = np.vstack((result,result_row))
 	# first row will throw a ValueError since vstack accepts rows of same len
